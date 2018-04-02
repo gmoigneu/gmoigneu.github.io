@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Guillaume Moigneu - Golang and web stuff</title>
+    <link>http://example.org/</link>
+    <description>Recent content on Guillaume Moigneu - Golang and web stuff</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 02 Apr 2018 09:08:44 +0200</lastBuildDate>
+    
+	<atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Golang  project #01 - Project Introduction: Srvpulse</title>
+      <link>http://example.org/post/part01-project-introduction/</link>
+      <pubDate>Mon, 02 Apr 2018 09:08:44 +0200</pubDate>
+      
+      <guid>http://example.org/post/part01-project-introduction/</guid>
+      <description>&lt;p&gt;What could be a better way of learning a new language and its ecosystem than creating a new side-project?&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s wrap up the goals and user stories of this project. &lt;strong&gt;Srvpulse.com will be a background jobs (crons, workers, etc.) monitoring system&lt;/strong&gt; that allows the user to be alerted when something goes wrong. Pretty simple, isn&amp;rsquo;t it?&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
