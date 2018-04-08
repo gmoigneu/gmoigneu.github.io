@@ -6,10 +6,22 @@
     <description>Recent content on Guillaume Moigneu - Golang and web stuff</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 02 Apr 2018 09:08:44 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 07 Apr 2018 09:09:44 +0200</lastBuildDate>
     
 	<atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>How to setup a non-production single node Kubernetes cluster</title>
+      <link>http://example.org/post/kubernetes-test-instance/</link>
+      <pubDate>Sat, 07 Apr 2018 09:09:44 +0200</pubDate>
+      
+      <guid>http://example.org/post/kubernetes-test-instance/</guid>
+      <description>&lt;p&gt;I wanted to get my hands on Kubernetes to test the build and deployment process of my &lt;a href=&#34;http://example.org/post/part01-project-introduction/&#34;&gt;Golang project&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;As it is only for development and testing purposes, I decided to go with a spare server and to setup only a single node Kubernetes instance.
+&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Golang  project #01 - Project Introduction: Srvpulse</title>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>How to setup a non-production single node Kubernetes cluster - Guillaume Moigneu - Golang and web stuff</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Guillaume Moigneu" />
+  <meta name="description" content="I wanted to get my hands on Kubernetes to test the build and deployment process of my Golang project.
+As it is only for development and testing purposes, I decided to go with a spare server and to setup only a single node Kubernetes instance. " />
+
+  <meta name="keywords" content="golang, php, magento, platform.sh" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.38" />
+
+
+<link rel="canonical" href="http://example.org/post/kubernetes-test-instance/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.1.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+<link rel="stylesheet" href="/css/overrides.css">
+
+
+<meta property="og:title" content="How to setup a non-production single node Kubernetes cluster" />
+<meta property="og:description" content="I wanted to get my hands on Kubernetes to test the build and deployment process of my Golang project.
+
+As it is only for development and testing purposes, I decided to go with a spare server and to setup only a single node Kubernetes instance.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/post/kubernetes-test-instance/" />
+
+
+
+<meta property="article:published_time" content="2018-04-07T09:09:44&#43;02:00"/>
+
+<meta property="article:modified_time" content="2018-04-07T09:09:44&#43;02:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="How to setup a non-production single node Kubernetes cluster">
+<meta itemprop="description" content="I wanted to get my hands on Kubernetes to test the build and deployment process of my Golang project.
+
+As it is only for development and testing purposes, I decided to go with a spare server and to setup only a single node Kubernetes instance.
+">
+
+
+<meta itemprop="datePublished" content="2018-04-07T09:09:44&#43;02:00" />
+<meta itemprop="dateModified" content="2018-04-07T09:09:44&#43;02:00" />
+<meta itemprop="wordCount" content="763">
+
+
+
+<meta itemprop="keywords" content="kubernetes,docker,containers," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="How to setup a non-production single node Kubernetes cluster"/>
+<meta name="twitter:description" content="I wanted to get my hands on Kubernetes to test the build and deployment process of my Golang project.
+
+As it is only for development and testing purposes, I decided to go with a spare server and to setup only a single node Kubernetes instance.
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Guillaume Moigneu</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Guillaume Moigneu</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">How to setup a non-production single node Kubernetes cluster</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-07 </span>
+        <div class="post-category">
+            
+              <a href="/categories/kubernetes/"> Kubernetes </a>
+            
+          </div>
+        <span class="more-meta"> 763 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-basic-server-setup">1. Basic server setup</a>
+<ul>
+<li><a href="#ssh-configuration">SSH configuration</a></li>
+<li><a href="#ufw">UFW</a></li>
+</ul></li>
+<li><a href="#2-install-docker-and-kubeadm">2. Install docker and kubeadm</a></li>
+<li><a href="#3-create-the-kubernetes-cluster">3. Create the kubernetes cluster</a></li>
+<li><a href="#3-local-setup">3. Local setup</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      <p>I wanted to get my hands on Kubernetes to test the build and deployment process of my <a href="/post/part01-project-introduction/">Golang project</a>.</p>
+
+<p>As it is only for development and testing purposes, I decided to go with a spare server and to setup only a single node Kubernetes instance.
+</p>
+
+<p>To be honest I first tried to spwan 4 VMs with Proxmox and then setup a full 3-nodes cluster but the overhead was clearly not worth it.</p>
+
+<p><strong>Strong warning: This tutorial is for testing purposes only. Security is not covered in this article and as the cluster is running on a single node, HA is out of scope.</strong></p>
+
+<h2 id="1-basic-server-setup">1. Basic server setup</h2>
+
+<p>The first thing was to deploy an Ubuntu LTS 16.04 on that machine. As Kubernetes requires 17.03 (or <em>maybe</em> up to 17.12 but not 18.03), going for Ubuntu 16.04 is the right choice as Kubernetes repositories does not provide 17.03 for Ubuntu 17.10</p>
+
+<h3 id="ssh-configuration">SSH configuration</h3>
+
+<p>Even if security is not my focus there, changing the SSH defaut port and allowing only pubkeys authentication is always a good thing:</p>
+
+<pre><code>mkdir .ssh
+echo &quot;&lt;your public key&gt;&quot; &gt; .ssh/authorized_keys
+</code></pre>
+
+<p>Let&rsquo;s edit the SSH config file:</p>
+
+<p><code>sudo vim /etc/ssh/sshd_config</code></p>
+
+<pre><code>Port 2207
+PermitRootLogin prohibit-password
+PubkeyAuthentication yes
+PasswordAuthentication no
+</code></pre>
+
+<h3 id="ufw">UFW</h3>
+
+<p>You should always run <code>ufw</code> on your box. Let&rsquo;s open only <code>ssh</code> and enable it:</p>
+
+<pre><code>sudo ufw allow 2207/tcp
+sudo ufw enable
+</code></pre>
+
+<h2 id="2-install-docker-and-kubeadm">2. Install docker and kubeadm</h2>
+
+<p>First let&rsquo;s setup docker 17.03:</p>
+
+<pre><code>sudo apt-get update
+sudo apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+sudo add-apt-repository \
+   &quot;deb https://download.docker.com/linux/$(. /etc/os-release; echo &quot;$ID&quot;) \
+   $(lsb_release -cs) \
+   stable&quot;
+sudo apt-get update &amp;&amp; apt-get install -y docker-ce=$(apt-cache madison docker-ce | grep 17.03 | head -1 | awk '{print $3}')
+</code></pre>
+
+<p>Next we need to install <code>kubectl</code> and <code>kubeadm</code>:</p>
+
+<pre><code>sudo apt-get update &amp;&amp; apt-get install -y apt-transport-https
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+sudo cat &lt;&lt;EOF &gt;/etc/apt/sources.list.d/kubernetes.list
+deb http://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+</code></pre>
+
+<p>Edit <code>/etc/systemd/system/kubelet.service.d/10-kubeadm.conf</code> and add the following argument: <code>--cgroup-driver=cgroupfs</code></p>
+
+<p>We need to restart <code>kubelet</code> to apply this change:</p>
+
+<pre><code>sudo systemctl daemon-reload
+sudo systemctl restart kubelet
+</code></pre>
+
+<h2 id="3-create-the-kubernetes-cluster">3. Create the kubernetes cluster</h2>
+
+<p>Kubernetes API uses the 6443 port so let&rsquo;sopen that in UFW:</p>
+
+<pre><code>ufw allow 6443/tcp
+</code></pre>
+
+<p>We will now use <code>kubeadm</code> to bootstrap the cluster:</p>
+
+<pre><code>sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-cert-extra-sans=195.154.104.52
+</code></pre>
+
+<p>The <code>pod-network-cidr</code> is required for Calico, the virtual pod network.
+<code>apiserver-cert-extra-sans</code> is used to add our public ip to our certificate so we can login from our local machine without a warning.</p>
+
+<p>Wait for the process to complete and copy the generated configuration to your user:</p>
+
+<pre><code>mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+</code></pre>
+
+<p>Once <code>kubectl</code> has its configuration, we don&rsquo;t need to <code>sudo</code> anymore and we can install the Calico network:</p>
+
+<pre><code>kubectl apply -f https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation/hosted/kubeadm/1.7/calico.yaml
+</code></pre>
+
+<p>As we are using a single node cluster, we need to allow pods to bedeployed on the master:</p>
+
+<pre><code>kubectl taint nodes --all node-role.kubernetes.io/master-
+</code></pre>
+
+<h2 id="3-local-setup">3. Local setup</h2>
+
+<p>Install kubectl: <code>brew install kubectl</code></p>
+
+<p>Copy your kubernetes configuration to your local machine: <code>mkdir ~/.kube &amp;&amp; scp user@kub:.kube/config ~/.kube</code></p>
+
+<p>You should now be able to run:</p>
+
+<pre><code>➜ kubectl get pods --all-namespaces
+NAMESPACE     NAME                                      READY     STATUS    RESTARTS   AGE
+kube-system   calico-etcd-7rzs9                         1/1       Running   0          23h
+kube-system   calico-kube-controllers-5449fdfcd-mlrlf   1/1       Running   0          23h
+kube-system   calico-node-jzlbp                         2/2       Running   0          23h
+kube-system   etcd-dck                                  1/1       Running   0          23h
+kube-system   kube-apiserver-dck                        1/1       Running   0          23h
+kube-system   kube-controller-manager-dck               1/1       Running   0          23h
+kube-system   kube-dns-86f4d74b45-n6c4r                 3/3       Running   0          23h
+kube-system   kube-proxy-jhx5r                          1/1       Running   0          23h
+kube-system   kube-scheduler-dck                        1/1       Running   0          23h
+kube-system   kubernetes-dashboard-7d5dcdb6d9-lg26s     1/1       Running   0          23h
+</code></pre>
+
+<p>Let&rsquo;s setup the <a href="https://github.com/kubernetes/dashboard">Kubernetes Dashboard</a>:</p>
+
+<pre><code>kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+</code></pre>
+
+<p>The <code>kubectl proxy</code> command open a local port (8001) to the cluster, taking care of authenticating you with the certificate in your config.</p>
+
+<p>The dashboard is now deployed but we need a <code>ServiceAccount</code> to use it. Create the following <code>saccount.yaml</code> file:</p>
+
+<pre><code>apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-user
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kube-system
+</code></pre>
+
+<p>Load that configuration:</p>
+
+<pre><code>kubectl create -f saccount.yaml
+</code></pre>
+
+<p>Each account has a token used as a password. Grab that token with:</p>
+
+<pre><code>kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
+</code></pre>
+
+<p>You can now access the dahsboard with the following URI: <a href="http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/">http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/</a></p>
+
+<p>Select the token radio and paste yours:</p>
+
+<p><img src="./kubauth.png" alt="kubauth.png" /></p>
+
+<p>You arw now connected to your dashboard and you can see all running services by selecting <code>All namespaces</code> in the left select field:</p>
+
+<p><img src="./kubdashboard.png" alt="kubdashboard.png" /></p>
+
+<p>You can now deploy any app you need on that cluster.</p>
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Guillaume Moigneu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-04-07</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/kubernetes/">kubernetes</a>
+          
+          <a href="/tags/docker/">docker</a>
+          
+          <a href="/tags/containers/">containers</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+        
+          <a class="next" href="/post/part01-project-introduction/">
+            <span class="next-text nav-default">Golang  project #01 - Project Introduction: Srvpulse</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:guillaume@moigneu.net" class="iconfont icon-email" title="email"></a>
+      <a href="https://twitter.com/gmoigneu" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://linkedin.com/in/guillaumemoigneu" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/gmoigneu" class="iconfont icon-github" title="github"></a>
+  <a href="http://example.org/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Guillaume Moigneu</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=3.1.1"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

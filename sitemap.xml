@@ -3,6 +3,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://example.org/post/kubernetes-test-instance/</loc>
+    <lastmod>2018-04-07T09:09:44+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>http://example.org/post/part01-project-introduction/</loc>
     <lastmod>2018-04-02T09:08:44+02:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -16,6 +23,20 @@
   </url>
   
   <url>
+    <loc>http://example.org/tags/containers/</loc>
+    <lastmod>2018-04-07T09:09:44+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tags/docker/</loc>
+    <lastmod>2018-04-07T09:09:44+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://example.org/tags/golang/</loc>
     <lastmod>2018-04-02T09:08:44+02:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -24,14 +45,28 @@
   
   <url>
     <loc>http://example.org/</loc>
-    <lastmod>2018-04-02T09:08:44+02:00</lastmod>
+    <lastmod>2018-04-07T09:09:44+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tags/kubernetes/</loc>
+    <lastmod>2018-04-07T09:09:44+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.org/categories/kubernetes/</loc>
+    <lastmod>2018-04-07T09:09:44+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://example.org/post/</loc>
-    <lastmod>2018-04-02T09:08:44+02:00</lastmod>
+    <lastmod>2018-04-07T09:09:44+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -45,7 +80,7 @@
   
   <url>
     <loc>http://example.org/tags/</loc>
-    <lastmod>2018-04-02T09:08:44+02:00</lastmod>
+    <lastmod>2018-04-07T09:09:44+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
